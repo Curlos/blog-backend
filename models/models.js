@@ -10,6 +10,7 @@ const userSchema = new Schema(
     username: {type: String, required: true},
     password: {type: String, required: true},
     comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+    blogPosts: [{type: Schema.Types.ObjectId, ref: 'BlogPost'}],
     likedBlogs: [{type: Schema.Types.ObjectId, ref: 'BlogPost'}],
     icon: {type: String},
     lowerCaseUsername: {type: String, lowercase: true, trim: true}
@@ -31,8 +32,11 @@ const commentSchema = new mongoose.Schema(
   {
     text: {type: String},
     timestamp: {type: String, default: timestamp},
-    author: {type: Schema.Types.ObjectId, ref: 'User', required: true},
-    blogPostedUnder: {type: Schema.Types.ObjectId, ref: 'BlogPost'},
+    userID: {type: Schema.Types.ObjectId, ref: 'User', required: true},
+    blogID: {type: Schema.Types.ObjectId, ref: 'BlogPost'},
+    likes: {type: Number, default: 0},
+    replies: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+    replyingTo: {type: Schema.Types.ObjectId, ref: 'Comment'}
   }
 )
 

@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const cors = require('cors')
 const PORT = process.env.PORT || 8888
 const blogRouter = require('./routers/blogRouter')
+const userRouter = require('./routers/userRouter')
 const database = require('./database/connection')
 
 const app = express()
@@ -21,6 +22,7 @@ app.use(passport.session());
 require('./passport/config')(passport)
 
 app.use('/blogs', blogRouter)
+app.use('/users', userRouter)
 
 app.listen(PORT, () => {
   database.connectToServer((err) => {

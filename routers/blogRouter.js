@@ -7,15 +7,14 @@ const router = express.Router()
 
 router.get('/', async (req, res) => {
   const results = await BlogPost.find({})
-  console.log(results)
-
   res.json(results)
 })
 
 router.post('/', async (req, res) => {
   const blogPost = new BlogPost({
     title: req.body.title,
-    text: req.body.text,
+    content: req.body.content,
+    headerImageURL: req.body.headerImageURL,
     likes: req.body.likes,
     comments: req.body.comments,
     author: req.body.author
@@ -53,9 +52,6 @@ router.get('/blog-post/:id', async (req, res) => {
 })
 
 router.get('/comment/:id', async (req, res) => {
-  console.log('getting one comment')
-  console.log(req.params)
-  console.log(await Comment.find({}))
   const comment = await Comment.find({_id: req.params.id})
   res.json(comment)
 })
@@ -79,6 +75,32 @@ router.post('/blog-post/comment', async (req, res) => {
   await blogPost.save()
 
   res.json(savedComment)
+})
+
+router.put('/blog-post/comment/like', async (req, res) => {
+
+  const comment = await Comment.findOne({_id: req.body.commentID})
+  const user = await User.findOne({_id: req.body.userID})
+
+  console.log(req.body)
+  
+  if (req.body.likedComment) {
+    console.log('unliking comment')
+    user.likedComments = user.likedComments.filter((commentID) => commentID != comment._id)
+    comment.likes = comment.likes - 1
+  } else {
+    console.log('liking comment')
+    comment.likes = comment.likes + 1
+    user.likedComments = [...user.likedComments, comment]
+
+    console.log(user.likedComments)
+
+
+  }
+
+  const updatedUser = await user.save()
+  const updatedComment = await comment.save()
+  res.json(updatedComment)
 })
 
 router.post('/comment/reply/:commentID', async (req, res) => {

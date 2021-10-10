@@ -10,6 +10,7 @@ const userSchema = new Schema(
     username: {type: String, required: true},
     password: {type: String, required: true},
     comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+    likedComments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
     blogPosts: [{type: Schema.Types.ObjectId, ref: 'BlogPost'}],
     likedBlogs: [{type: Schema.Types.ObjectId, ref: 'BlogPost'}],
     icon: {type: String},
@@ -20,7 +21,8 @@ const userSchema = new Schema(
 const blogPostSchema = new mongoose.Schema(
   {
     title: {type: String, required: true},
-    text: {type: String},
+    content: {type: String},
+    headerImageURL: {type: String},
     timestamp: {type: String, default: timestamp},
     likes: {type: Number, default: 0},
     comments: [{type: Schema.Types.ObjectId, ref: 'BlogPost'}],
